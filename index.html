@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Baccarat AI PRO V2</title>
+
+<style>
+/* ===== 🌌 ULTRA LUXURY BACKGROUND ===== */
+
+body{
+  margin:0;
+  font-family:sans-serif;
+  color:#e2e8f0;
+  text-align:center;
+  overflow-x:hidden;
+
+  background:#020617;
+}
+
+/* 🔥 LAYER 1: AURORA FLOW */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-20%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(59,130,246,0.35), transparent 60%),
+    radial-gradient(circle at 80% 40%, rgba(239,68,68,0.30), transparent 60%),
+    radial-gradient(circle at 50% 80%, rgba(34,197,94,0.25), transparent 60%),
+    radial-gradient(circle at 30% 70%, rgba(168,85,247,0.25), transparent 60%);
+  
+  filter: blur(120px);
+  animation: auroraMove 25s ease-in-out infinite alternate;
+  z-index:-3;
+}
+
+/* 🔥 LAYER 2: LIGHT WAVES */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.05), transparent 70%),
+    linear-gradient(60deg, transparent 20%, rgba(255,255,255,0.04), transparent 80%);
+  
+  background-size: 300% 300%;
+  animation: waveMove 18s linear infinite;
+  z-index:-2;
+}
+
+/* 🔥 LAYER 3: PARTICLE GRID */
+.bg-particles{
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 35px 35px;
+  animation: particleMove 40s linear infinite;
+  opacity:0.25;
+  z-index:-1;
+}
+
+/* ===== 🎞️ ANIMATIONS ===== */
+
+@keyframes auroraMove{
+  0%{
+    transform:translate(0,0) scale(1);
+  }
+  50%{
+    transform:translate(-80px,40px) scale(1.2);
+  }
+  100%{
+    transform:translate(60px,-30px) scale(1.1);
+  }
+}
+
+@keyframes waveMove{
+  0%{
+    background-position:0% 50%;
+  }
+  100%{
+    background-position:200% 50%;
+  }
+}
+
+@keyframes particleMove{
+  from{
+    background-position:0 0;
+  }
+  to{
+    background-position:300px 300px;
+  }
+}
+
+/* ===== LAYOUT ===== */
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:10px;
+}
+
+/* ===== CARD (GLASS PREMIUM) ===== */
+.card{
+  background:rgba(15,23,42,0.65);
+  backdrop-filter:blur(14px);
+  margin:10px;
+  padding:15px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.7),
+    inset 0 0 20px rgba(255,255,255,0.03);
+
+  transition:0.3s;
+}
+
+/* Hover ลอย */
+.card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.9),
+    0 0 25px rgba(59,130,246,0.25);
+}
+
+/* ===== BUTTON ===== */
+button{
+  padding:10px 15px;
+  margin:5px;
+  border:none;
+  border-radius:10px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+/* Hover */
+button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.1);
+}
+
+/* Click */
+button:active{
+  transform:scale(0.95);
+}
+
+/* Glow Colors */
+.btnP{
+  background:#3b82f6;
+  box-shadow:0 0 12px #3b82f6;
+}
+.btnB{
+  background:#ef4444;
+  box-shadow:0 0 12px #ef4444;
+}
+.btnT{
+  background:#22c55e;
+  box-shadow:0 0 12px #22c55e;
+}
+.btnCtrl{
+  background:#64748b;
+}
+
+/* ===== AI DISPLAY ===== */
+.ai{
+  font-size:3rem;
+  font-weight:900;
+  margin:10px;
+  animation:pulse 1.5s infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+  100%{transform:scale(1);}
+}
+
+.player{
+  color:#3b82f6;
+  text-shadow:0 0 15px #3b82f6;
+}
+
+.banker{
+  color:#ef4444;
+  text-shadow:0 0 15px #ef4444;
+}
+
+.wait{
+  color:#94a3b8;
+}
+
+/* ===== STATS ===== */
+.stat{
+  font-size:1.1rem;
+  margin:5px;
+}
+
+/* ===== GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(25,1fr);
+  gap:3px;
+}
+
+/* Cell */
+.cell{
+  height:12px;
+  border-radius:3px;
+  transition:0.2s;
+}
+
+/* Hover zoom */
+.cell:hover{
+  transform:scale(1.3);
+}
+
+/* Result Colors */
+.win{
+  background:#22c55e;
+  box-shadow:0 0 6px #22c55e;
+}
+
+.lose{
+  background:#ef4444;
+  box-shadow:0 0 6px #ef4444;
+}
+
+.neutral{
+  background:#334155;
+}
+
+/* ===== EXTRA COLORS ===== */
+.pcell{background:#3b82f6;}
+.bcell{background:#ef4444;}
+
+.accurate{background:#22c55e;}
+.miss{background:#ef4444;}
+
+/* ===== SMALL TEXT ===== */
+#lineTitle{
+  font-size:12px;
+  color:#94a3b8;
+  margin-top:5px;
+}
+
+/* ===== 🎰 BEAD ROAD ===== */
+
+.bead-road{
+  display:grid;
+  grid-auto-flow:column;
+  grid-template-rows:repeat(6, 22px); /* 6 แถว */
+  gap:4px;
+  justify-content:start;
+  overflow-x:auto;
+  padding:10px;
+}
+
+/* ช่อง */
+.bead{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  font-size:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  color:white;
+  box-shadow:0 0 8px rgba(255,255,255,0.1);
+  transition:0.2s;
+}
+
+/* Hover */
+.bead:hover{
+  transform:scale(1.2);
+}
+
+/* สี */
+.bead.P{
+  background:#3b82f6;
+  box-shadow:0 0 10px #3b82f6;
+}
+
+.bead.B{
+  background:#ef4444;
+  box-shadow:0 0 10px #ef4444;
+}
+
+.bead.T{
+  background:#22c55e;
+  box-shadow:0 0 10px #22c55e;
+}
+
+/* Stats */
+.bead-stats{
+  margin-top:10px;
+  font-size:14px;
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  font-weight:bold;
+}
+
+/* ===== 🔥 WINRATE EFFECT ===== */
+
+/* ระดับ 1: เขียวเรือง */
+.winrate-good{
+  color:#22c55e;
+  text-shadow:0 0 10px #22c55e, 0 0 20px #22c55e;
+}
+
+/* ระดับ 2: Pulse */
+.winrate-hot{
+  color:#4ade80;
+  text-shadow:0 0 15px #22c55e, 0 0 30px #22c55e;
+  animation: pulseWin 1.2s infinite;
+}
+
+/* ระดับ 3: Flash โหด */
+.winrate-fire{
+  color:#bbf7d0;
+  text-shadow:
+    0 0 10px #22c55e,
+    0 0 25px #22c55e,
+    0 0 50px #22c55e;
+
+  animation: flashWin 0.6s infinite;
+}
+
+/* Pulse */
+@keyframes pulseWin{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.1);}
+  100%{transform:scale(1);}
+}
+
+/* Flash */
+@keyframes flashWin{
+  0%{opacity:1;}
+  50%{opacity:0.4;}
+  100%{opacity:1;}
+}
+
+/* ===== 📊 MINI HUD (TOP RIGHT) ===== */
+.hud{
+  position:fixed;
+  top:15px;
+  right:15px;
+  width:200px;
+  z-index:999;
+  
+  background:rgba(15,23,42,0.85);
+  backdrop-filter:blur(10px);
+
+  border-radius:14px;
+  padding:10px;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.8),
+    0 0 20px rgba(59,130,246,0.15);
+}
+
+/* Title */
+.hud-title{
+  font-size:12px;
+  color:#94a3b8;
+  margin-bottom:6px;
+}
+
+/* Row */
+.hud-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:6px 0;
+  font-size:13px;
+}
+
+/* Bet Text */
+.hud-bet{
+  font-weight:bold;
+}
+
+/* Color */
+.hudP{color:#3b82f6;}
+.hudB{color:#ef4444;}
+.hudW{color:#94a3b8;}
+
+/* Winrate small */
+.hud-win{
+  font-size:11px;
+}
+
+</style>
+</head>
+
+<body>
+<div class="bg-stars"></div>
+<div class="bg-grid"></div>
+
+<!-- 🔐 LOGIN SCREEN -->
+<div id="loginBox" style="
+position:fixed;
+inset:0;
+background:#020617;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+flex-direction:column;
+">
+
+<h2 style="margin-bottom:15px;">🔐 LOGIN</h2>
+
+<input id="user" placeholder="Username"
+style="padding:10px;margin:5px;border-radius:8px;border:none;">
+
+<div style="position:relative;">
+  <input id="pass" type="password" placeholder="Password"
+  style="padding:10px;margin:5px;border-radius:8px;border:none;">
+
+  <!-- 👁 ปุ่มดูรหัส -->
+  <span onclick="togglePass()" style="
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:black;
+  font-weight:bold;
+  ">👁</span>
+</div>
+
+<button onclick="login()" style="
+padding:10px 20px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#22c55e;
+color:white;
+font-weight:bold;
+cursor:pointer;
+">
+LOGIN
+</button>
+
+</div>
+
+
+<div class="container">
+
+<h2> BACCARAT AI PRO V2</h2>
+
+
+<!-- INPUT -->
+<div class="card">
+<button class="btnP" onclick="add('P')">PLAYER</button>
+<button class="btnB" onclick="add('B')">BANKER</button>
+<button class="btnT" onclick="add('T')">TIE</button>
+<br>
+<button class="btnCtrl" onclick="undo()">UNDO</button>
+<button class="btnCtrl" onclick="clearAll()">CLEAR</button>
+</div>
+
+<!-- STATS -->
+<div class="card">
+<div class="stat">📊 <span id="percent"></span></div>
+<div class="stat">  Winrate: <span id="winrate"></span></div>
+<div class="stat">  Confidence: <span id="conf"></span></div>
+</div>
+
+<!-- 🎰 BEAD ROAD -->
+<div class="card">
+
+<div style="font-size:14px;color:#94a3b8;margin-bottom:6px;">
+🎰 BEAD ROAD (คาสิโนจริง)
+</div>
+
+<div id="beadRoad" class="bead-road"></div>
+
+<!-- 🔢 STATS -->
+<div class="bead-stats">
+  🟦 P: <span id="countP">0</span>
+  🔴 B: <span id="countB">0</span>
+  🟢 T: <span id="countT">0</span>
+  ⚪ TOTAL: <span id="countTotal">0</span>
+</div>
+
+</div>
+
+<!-- 🔥 RESULT (ถูก/ผิด) -->
+<div style="margin-top:10px;color:#94a3b8;font-size:13px;">
+👉 ผลย้อนหลัง
+</div>
+
+<div id="mainGrid" class="grid" style="margin-top:6px;"></div>
+
+<!-- AI -->
+<div class="card">
+<div id="ai" class="ai wait">WAIT...</div>
+<div id="signal"></div>
+</div>
+
+
+
+<div class="card">
+
+<!-- ===== TREND ===== -->
+<div style="color:#94a3b8;font-size:14px;">🟦 TREND (ตามแนว)</div>
+
+<div id="trendBet" style="font-size:2rem;font-weight:900">-</div>
+<div id="trendPct">0%</div>
+<div id="trendWinrate" style="font-size:1rem;color:#22c55e;margin-top:3px;">
+Winrate: 0%
+</div>
+<div id="trendRes" style="font-size:1.2rem;margin-top:5px;">-</div>
+
+<!-- 🔥 GRID TREND -->
+<div id="trendGrid" class="grid" style="margin-top:8px;"></div>
+
+
+<hr style="border:1px solid #1e293b;margin:15px 0;">
+
+
+<!-- ===== REVERSE ===== -->
+<div style="color:#94a3b8;font-size:14px;">🟥 REVERSE (สวน)</div>
+
+<div id="revBet" style="font-size:2rem;font-weight:900">-</div>
+<div id="revPct">0%</div>
+<div id="revWinrate" style="font-size:1rem;color:#22c55e;margin-top:3px;">
+Winrate: 0%
+</div>
+<div id="revRes" style="font-size:1.2rem;margin-top:5px;">-</div>
+
+<!-- 🔥 GRID REVERSE -->
+<div id="revGrid" class="grid" style="margin-top:8px;"></div>
+
+</div>
+
+
+
+
+<!-- HISTORY + MULTI LINES -->
+<div class="card">
+
+
+
+</div>
+
+<script>
+
+
+
+let trendHist=[];
+let reverseHist=[];
+let results=[];
+let history=[];
+let loss=0, skip=0, skipCount=0;
+let dnaMemory={};
+
+/* ===== INPUT ===== */
+function add(x){
+
+ // 1. เช็คผลของรอบก่อนก่อน
+ check(x);
+
+ // 2. ค่อย push result ใหม่
+ results.push(x);
+
+ // 3. update
+ update();
+}
+
+function undo(){
+
+ results.pop();
+
+ history.pop();
+ trendHist.pop();
+ reverseHist.pop();
+
+ // 🔥 ล้างค่า win ทั้งหมด
+ history.forEach(x=> delete x.win);
+ trendHist.forEach(x=> delete x.win);
+ reverseHist.forEach(x=> delete x.win);
+
+ // ✅ ใช้ตัวใหม่แทน
+ recalcAllWin();
+
+ update();
+}
+
+
+function clearAll(){
+ results=[];
+ history=[];
+ trendHist=[];     // ✅ เพิ่ม
+ reverseHist=[];   // ✅ เพิ่ม
+ loss=0;
+ skip=0;
+ skipCount=0;
+ dnaMemory={};     // ✅ ล้าง AI
+
+ update();
+}
+
+/* ===== DNA ===== */
+function learnDNA(){
+ let clean=results.filter(x=>x!='T');
+ if(clean.length<6) return;
+
+ let key=clean.slice(-6,-1).join('');
+ let next=clean.at(-1);
+
+ if(!dnaMemory[key]) dnaMemory[key]={P:0,B:0};
+ dnaMemory[key][next]++;
+}
+
+function dnaAI(){
+ let clean=results.filter(x=>x!='T');
+ if(clean.length<5) return null;
+
+ let key=clean.slice(-5).join('');
+ let d=dnaMemory[key];
+ if(!d) return null;
+
+ return d.P>d.B?'P':'B';
+}
+
+/* ===== CORE ===== */
+function streak(){
+ let c=1;
+ for(let i=results.length-1;i>0;i--){
+  if(results[i]==results[i-1]) c++;
+  else break;
+ }
+ return c;
+}
+
+function detectPattern(clean){
+ let last=clean.at(-1);
+ let s=streak();
+
+ if(s>=4) return {bet:last, power:4};
+
+ let str=clean.slice(-6).join('');
+ if(/PBPBPB|BPBPBP/.test(str)){
+  return {bet:last=='P'?'B':'P', power:3};
+ }
+
+ return null;
+}
+
+/* ===== DECISION ===== */
+function decide(){
+ let clean=results.filter(x=>x!='T');
+ if(clean.length<4) return null;
+
+ let score={P:0,B:0};
+
+ let p=clean.filter(x=>x=='P').length;
+ let b=clean.filter(x=>x=='B').length;
+
+ if(p>b) score.P+=2;
+ if(b>p) score.B+=2;
+
+ clean.slice(-3).forEach((r,i)=>{
+  let w=i+1;
+  if(r=='P') score.P+=w;
+  if(r=='B') score.B+=w;
+ });
+
+ let pat=detectPattern(clean);
+ if(pat){
+  if(pat.bet=='P') score.P+=pat.power;
+  else score.B+=pat.power;
+ }
+
+ let dna=dnaAI();
+ if(dna=='P') score.P+=4;
+ if(dna=='B') score.B+=4;
+
+ let bet=score.P>score.B?'P':'B';
+ let power=Math.max(score.P,score.B);
+
+ return {bet,score:power};
+}
+
+/* ===== TREND AI ===== */
+function trendAI(){
+ let clean = results.filter(x=>x!='T');
+ if(clean.length<4) return null;
+
+ let p = clean.filter(x=>x=='P').length;
+ let b = clean.filter(x=>x=='B').length;
+
+ let last3 = clean.slice(-3);
+
+ let scoreP = p;
+ let scoreB = b;
+
+ last3.forEach((r,i)=>{
+   let w = i+1;
+   if(r=='P') scoreP += w;
+   if(r=='B') scoreB += w;
+ });
+
+ let bet = scoreP > scoreB ? 'P':'B';
+ let power = Math.max(scoreP,scoreB);
+
+ return {bet, pct: Math.min(95, power*5)};
+}
+
+
+/* ===== REVERSE AI ===== */
+function reverseAI(){
+ let clean = results.filter(x=>x!='T');
+ if(clean.length<4) return null;
+
+ let last = clean.at(-1);
+ let streakCount = streak();
+
+ // 🔥 ถ้าไหลยาว → สวน
+ if(streakCount>=3){
+   return {
+     bet: last=='P'?'B':'P',
+     pct: 70
+   };
+ }
+
+ // 🔥 ถ้าสลับ PBPBP
+ let str = clean.slice(-6).join('');
+ if(/PBPBPB|BPBPBP/.test(str)){
+   return {
+     bet: last, // ตาม pattern
+     pct: 65
+   };
+ }
+
+ return null;
+}
+
+/* ===== CONF ===== */
+function conf(b){
+ if(!b) return 0;
+ return Math.min(95,b.score*6);
+}
+
+function check(real){
+
+ if(real=='T') return;
+
+ /* ===== CHECK MAIN ===== */
+ if(history.length){
+   let prev = history.at(-1);
+   if(prev){
+     prev.win = prev.bet == real;
+     if(prev.win) loss=0;
+     else loss++;
+   }
+ }
+
+ /* ===== CHECK TREND ===== */
+ let tPrev = trendHist.at(-1);
+ if(tPrev){
+   tPrev.win = tPrev.bet == real;
+ }
+
+ /* ===== CHECK REVERSE ===== */
+ let rPrev = reverseHist.at(-1);
+ if(rPrev){
+   rPrev.win = rPrev.bet == real;
+ }
+}
+
+function recalcAllWin(){
+
+ let idx = 0;
+
+ results.forEach((r,i)=>{
+
+   if(r=='T') return;
+
+   let h = history[idx];
+   if(h) h.win = h.bet == r;
+
+   let t = trendHist[idx];
+   if(t) t.win = t.bet == r;
+
+   let rev = reverseHist[idx];
+   if(rev) rev.win = rev.bet == r;
+
+   idx++;
+ });
+}
+
+
+/* ===== MAIN RESULT GRID ===== */
+function renderMainGrid(){
+
+ let el = document.getElementById("mainGrid");
+ el.innerHTML='';
+
+ history.forEach(h=>{
+   let d=document.createElement("div");
+
+   if(h.win===true) d.className="cell win";
+   else if(h.win===false) d.className="cell lose";
+
+   el.appendChild(d);
+ });
+
+}
+
+function renderBeadRoad(){
+
+ let el = document.getElementById("beadRoad");
+ if(!el) return; // กัน error
+
+ el.innerHTML = '';
+
+ let col = 0;
+ let row = 0;
+
+ results.forEach((r,i)=>{
+
+   let bead = document.createElement("div");
+   bead.className = "bead " + r;
+   bead.innerText = r;
+
+   // ✅ คำนวณตำแหน่ง (6 แถว)
+   col = Math.floor(i / 6);
+   row = i % 6;
+
+   bead.style.gridColumn = (col + 1);
+   bead.style.gridRow = (row + 1);
+
+   // 🔥 highlight ตัวล่าสุด
+   if(i === results.length - 1){
+     bead.style.outline = "2px solid #fff";
+   }
+
+   el.appendChild(bead);
+
+ });
+
+ /* ===== COUNT ===== */
+ let p = results.filter(x=>x=='P').length;
+ let b = results.filter(x=>x=='B').length;
+ let t = results.filter(x=>x=='T').length;
+
+ document.getElementById("countP").innerText = p;
+ document.getElementById("countB").innerText = b;
+ document.getElementById("countT").innerText = t;
+ document.getElementById("countTotal").innerText = results.length;
+
+ // 🔥 auto scroll ไปขวาสุด
+ el.scrollLeft = el.scrollWidth;
+}
+
+
+function renderExtraLines(){
+
+ let percentEl=document.getElementById("percentLine");
+ let accEl=document.getElementById("accLine");
+
+ percentEl.innerHTML='';
+ accEl.innerHTML='';
+
+ let clean=[];
+
+ results.forEach((r,i)=>{
+
+  if(r!='T') clean.push(r);
+
+  /* ===== % LINE ===== */
+  let p=clean.filter(x=>x=='P').length;
+  let b=clean.filter(x=>x=='B').length; // 🔥 แก้จาก lengt เป็น length
+
+  let total=p+b;
+
+  let box=document.createElement("div");
+
+  if(total){
+    let pPct=(p/total*100);
+    if(pPct>50) box.className="cell pcell";
+    else box.className="cell bcell";
+  }
+
+  percentEl.appendChild(box);
+
+  /* ===== ACC LINE ===== */
+  let acc=document.createElement("div");
+
+  let h=history[i];
+
+  if(h && h.win===true) acc.className="cell accurate";
+  else if(h && h.win===false) acc.className="cell miss";
+  else acc.className="cell neutral";
+
+  accEl.appendChild(acc);
+
+ });
+}
+
+function renderResultGrid(){
+
+ let tEl = document.getElementById("trendGrid");
+ let rEl = document.getElementById("revGrid");
+
+ tEl.innerHTML='';
+ rEl.innerHTML='';
+
+ trendHist.forEach(h=>{
+   let d=document.createElement("div");
+   if(h.win===true) d.className="cell win";
+   else if(h.win===false) d.className="cell lose";
+   else d.className="cell neutral";
+   tEl.appendChild(d);
+ });
+
+ reverseHist.forEach(h=>{
+   let d=document.createElement("div");
+   if(h.win===true) d.className="cell win";
+   else if(h.win===false) d.className="cell lose";
+   else d.className="cell neutral";
+   rEl.appendChild(d);
+ });
+
+}
+
+function calcWinrate(arr){
+
+ let plays = arr.filter(x=>x.win !== undefined);
+ let win = plays.filter(x=>x.win).length;
+
+ return plays.length ? Math.round(win/plays.length*100) : 0;
+}
+
+
+
+/* ===== UPDATE ===== */
+function update(){
+
+ learnDNA();
+
+ let best=decide();
+ let c=conf(best);
+
+ let signal='SKIP';
+
+ if(skip>0){
+  skip--;
+ }else if(best){
+  if(c>=60) signal=best.bet;
+  else if(c>=40) signal=results.at(-1);
+ }
+
+ if(loss>=3){
+  skip=2;
+  signal='SKIP';
+ }
+
+ if(signal=='SKIP') skipCount++;
+ else skipCount=0;
+
+ if(skipCount>=3 && best){
+  signal=best.bet;
+ }
+
+ if(best){
+  history.push({bet:best.bet});
+ }
+
+
+ /* ===== 2 LINE AI ===== */
+let t = trendAI();
+let r = reverseAI();
+
+
+
+/* ===== บันทึกรอบใหม่ (ต้องอยู่ท้ายสุด) ===== */
+if(t){
+  trendHist.push({bet:t.bet});
+  if(trendHist.length > 200) trendHist.shift(); // กันยาวเกิน
+}
+
+if(r){
+  reverseHist.push({bet:r.bet});
+  if(reverseHist.length > 200) reverseHist.shift();
+}
+
+/* ===== RESULT SHOW (ของรอบก่อน) ===== */
+let tPrev = trendHist.at(-1);
+if(tPrev && tPrev.win!==undefined){
+ let el = document.getElementById("trendRes");
+ el.innerText = tPrev.win ? "✔ WIN" : "❌ LOSE";
+ el.style.color = tPrev.win ? "#22c55e" : "#ef4444";
+}else{
+ document.getElementById("trendRes").innerText='-';
+}
+
+let rPrev = reverseHist.at(-1);
+if(rPrev && rPrev.win!==undefined){
+ let el = document.getElementById("revRes");
+ el.innerText = rPrev.win ? "✔ WIN" : "❌ LOSE";
+ el.style.color = rPrev.win ? "#22c55e" : "#ef4444";
+}else{
+ document.getElementById("revRes").innerText='-';
+}
+
+
+
+/* TREND */
+if(t){
+ document.getElementById("trendBet").innerText =
+   t.bet=='P'?'PLAYER':'BANKER';
+
+ document.getElementById("trendBet").style.color =
+   t.bet=='P'?'#3b82f6':'#ef4444';
+
+ document.getElementById("trendPct").innerText = t.pct+"%";
+}else{
+ document.getElementById("trendBet").innerText='-';
+ document.getElementById("trendPct").innerText='0%';
+}
+
+/* ===== REVERSE SHOW ===== */
+if(r){
+  document.getElementById("revBet").innerText =
+    r.bet=='P'?'PLAYER':'BANKER';
+
+  document.getElementById("revBet").style.color =
+    r.bet=='P'?'#3b82f6':'#ef4444';
+
+  document.getElementById("revPct").innerText = r.pct+"%";
+
+}else{
+  document.getElementById("revBet").innerText='-';
+  document.getElementById("revPct").innerText='0%';
+}
+
+
+/* ===== TREND WINRATE + EFFECT ===== */
+let tRate = calcWinrate(trendHist);
+let tEl = document.getElementById("trendWinrate");
+
+tEl.innerText = "Winrate: " + tRate + "%";
+
+/* ===== REVERSE WINRATE + EFFECT ===== */
+let rRate = calcWinrate(reverseHist);
+let rEl = document.getElementById("revWinrate");
+
+rEl.innerText = "Winrate: " + rRate + "%";
+
+// reset class
+rEl.className = "";
+
+// 🔥 effect
+if(rRate >= 80){
+  rEl.classList.add("winrate-fire");
+}
+else if(rRate >= 70){
+  rEl.classList.add("winrate-hot");
+}
+else if(rRate >= 60){
+  rEl.classList.add("winrate-good");
+}
+
+
+// reset class
+tEl.className = "";
+
+// 🔥 effect
+if(tRate >= 80){
+  tEl.classList.add("winrate-fire");
+}
+else if(tRate >= 70){
+  tEl.classList.add("winrate-hot");
+}
+else if(tRate >= 60){
+  tEl.classList.add("winrate-good");
+}
+
+/* ===== UI (MAIN AI) ===== */
+let ai = document.getElementById("ai");
+
+if(signal=='P'){
+  ai.innerHTML="PLAYER";
+  ai.className="ai player";
+}
+else if(signal=='B'){
+  ai.innerHTML="BANKER";
+  ai.className="ai banker";
+}
+else{
+  ai.innerHTML="WAIT";
+  ai.className="ai wait";
+}
+
+
+/* ===== CONF + WINRATE MAIN ===== */
+document.getElementById("conf").innerText = c+"%";
+
+let plays = history.filter(x=>x.win!==undefined);
+let win = plays.filter(x=>x.win).length;
+let pct = plays.length ? Math.round(win/plays.length*100) : 0;
+
+let winEl = document.getElementById("winrate");
+
+winEl.innerText = pct + "%";
+winEl.className = "";
+
+// 🔥 effect MAIN
+if(pct >= 80){
+  winEl.classList.add("winrate-fire");
+}
+else if(pct >= 70){
+  winEl.classList.add("winrate-hot");
+}
+else if(pct >= 60){
+  winEl.classList.add("winrate-good");
+}
+
+
+
+ document.getElementById("conf").innerText=c+"%";
+
+
+
+winEl.innerText = pct + "%";
+
+// 🔥 reset class
+winEl.className = "";
+
+// 🔥 ใส่ effect ตามระดับ
+if(pct >= 80){
+  winEl.classList.add("winrate-fire");
+}
+else if(pct >= 70){
+  winEl.classList.add("winrate-hot");
+}
+else if(pct >= 60){
+  winEl.classList.add("winrate-good");
+}
+
+
+
+ let p=results.filter(x=>x=='P').length;
+ let b=results.filter(x=>x=='B').length;
+ let total=p+b;
+
+ let pPct=total?(p/total*100).toFixed(0):0;
+ let bPct=total?(b/total*100).toFixed(0):0;
+
+ document.getElementById("percent").innerText=
+ `P ${pPct}% | B ${bPct}%`;
+
+ document.getElementById("signal").innerText =
+ signal=='SKIP'?'⛔ SKIP':`▶ BET ${signal}`;
+
+recalcAllWin(); // 🔥 เพิ่มบรรทัดนี้
+renderMainGrid();     // ✅ อันนี้ของ MAIN (ใต้ Confidence)
+renderResultGrid();   // ของ Trend + Reverse
+renderBeadRoad();  
+
+/* ===== 📊 HUD UPDATE ===== */
+
+// MAIN
+let hudMain = document.getElementById("hudMain");
+if(hudMain){
+  hudMain.innerText = signal=='P'?'P':signal=='B'?'B':'-';
+
+  hudMain.className = "hud-bet " + (
+    signal=='P' ? "hudP" :
+    signal=='B' ? "hudB" : "hudW"
+  );
+
+  document.getElementById("hudMainWin").innerText = pct + "%";
+}
+
+// TREND
+let hudTrend = document.getElementById("hudTrend");
+if(hudTrend){
+  if(t){
+    hudTrend.innerText = t.bet;
+    hudTrend.className = "hud-bet " + (t.bet=='P'?'hudP':'hudB');
+  }else{
+    hudTrend.innerText = "-";
+  }
+
+  document.getElementById("hudTrendWin").innerText = tRate + "%";
+}
+
+// REVERSE
+let hudRev = document.getElementById("hudRev");
+if(hudRev){
+  if(r){
+    hudRev.innerText = r.bet;
+    hudRev.className = "hud-bet " + (r.bet=='P'?'hudP':'hudB');
+  }else{
+    hudRev.innerText = "-";
+  }
+
+  document.getElementById("hudRevWin").innerText = rRate + "%";
+}
+   // ✅ เพิ่มตรงนี้ แสดง Bead Road
+}
+
+/* ===== LOGIN SYSTEM + LICENSE SERVER ===== */
+
+
+async function login(){
+
+   const userInput = document.getElementById("user");
+   const passInput = document.getElementById("pass");
+
+
+  const loginBoxEl = document.getElementById("loginBox");
+
+  const u = userInput.value.trim();
+  const p = passInput.value.trim();
+
+  /* ===============================
+     2. ตรวจ User / Password เบื้องต้น
+     =============================== */
+  if(!u || !p){
+    alert("❌ กรุณากรอก User และ Password");
+    return;
+  }
+
+  try{
+
+    /* ===============================
+       3. เชื่อมต่อ LICENSE SERVER
+       =============================== */
+    const res = await fetch(
+      "https://morning-block-55bb.havanalanna.workers.dev/?user="
+      + encodeURIComponent(u)
+      + "&pass="
+      + encodeURIComponent(p)
+    );
+
+    const data = await res.json();
+
+    /* ===============================
+       4. SERVER อนุญาต
+       =============================== */
+    if(data.status === "ok"){
+
+      loginBoxEl.style.display = "none";
+
+      /* เริ่มระบบเดิม */
+      update();
+
+      /* ===============================
+         5. ตรวจ License ซ้ำทุก 30 วินาที
+         =============================== */
+      const serverUser = u;
+      const serverPass = p;
+
+      setInterval(async ()=>{
+
+        try{
+
+          const r = await fetch(
+            "https://morning-block-55bb.havanalanna.workers.dev/?user="
+            + encodeURIComponent(serverUser)
+            + "&pass="
+            + encodeURIComponent(serverPass)
+          );
+
+          const j = await r.json();
+
+          /* License ถูกปิด / หมดอายุ / ไม่ผ่าน */
+          if(j.status !== "ok"){
+
+            alert("⛔ License ถูกปิดใช้งาน");
+
+            location.reload();
+          }
+
+        }catch(e){
+
+          /* Server ติดต่อไม่ได้
+             ไม่ทำลายระบบเดิม */
+          console.log("License check error:", e);
+
+        }
+
+      },30000);
+
+    }
+
+    /* ===============================
+       6. SERVER ไม่อนุญาต
+       =============================== */
+    else{
+
+      alert("❌ User หรือ Password ไม่ถูกต้อง");
+
+    }
+
+  }catch(e){
+
+    /* ===============================
+       7. ติดต่อ Server ไม่ได้
+       =============================== */
+    alert("❌ ไม่สามารถเชื่อมต่อ License Server");
+
+    console.log("License Server Error:", e);
+
+  }
+}
+
+
+/* 👁 SHOW / HIDE PASSWORD */
+function togglePass(){
+  let pass = document.getElementById("pass");
+
+  if(pass.type === "password"){
+    pass.type = "text";
+  }else{
+    pass.type = "password";
+  }
+}
+
+</script>
+
+
+<!-- 📊 MINI HUD -->
+<div class="hud">
+
+  <div class="hud-title">⚡ QUICK VIEW</div>
+
+  <!-- MAIN -->
+  <div class="hud-row">
+    <span>AI</span>
+    <span id="hudMain" class="hud-bet">-</span>
+  </div>
+  <div class="hud-row hud-win">
+    <span>Win</span>
+    <span id="hudMainWin">0%</span>
+  </div>
+
+  <hr style="border:1px solid #1e293b;">
+
+  <!-- TREND -->
+  <div class="hud-row">
+    <span>Trend</span>
+    <span id="hudTrend" class="hud-bet">-</span>
+  </div>
+  <div class="hud-row hud-win">
+    <span>Win</span>
+    <span id="hudTrendWin">0%</span>
+  </div>
+
+  <hr style="border:1px solid #1e293b;">
+
+  <!-- REVERSE -->
+  <div class="hud-row">
+    <span>Rev</span>
+    <span id="hudRev" class="hud-bet">-</span>
+  </div>
+  <div class="hud-row hud-win">
+    <span>Win</span>
+    <span id="hudRevWin">0%</span>
+  </div>
+
+</div>
+
+</body>
+</html>
